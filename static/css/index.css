@@ -9,7 +9,7 @@ body {
     margin: 0;
 }
 
-.fileUploadForm {
+#fileUploadForm {
     text-align: center;
     background-color: #222;
     padding: 20px;
@@ -25,7 +25,7 @@ input[type="file"] {
     margin: 10px 0;
 }
 
-.uploadButton {
+#uploadButton {
     background-color: #007bff;
     color: #fff;
     padding: 10px 20px;
@@ -34,7 +34,7 @@ input[type="file"] {
     cursor: pointer;
 }
 
-.status {
+#status {
     margin: 20px;
 }
 
