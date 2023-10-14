@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Загрузка файла</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/md5.js"></script>
+    <link rel="stylesheet" href="./static/css/index.css">
+</head>
+
+<body>
+    <form id="fileUploadForm" enctype="multipart/form-data">
+        <input type="file" id="fileInput" accept=".md" class="file-input">
+        <label id="file-input-label" for="fileInput">Select a File</label>
+
+        <input type="submit" value="Watch in browser" id="uploadButton" style="margin: 15px;">
+    </form>
+
+    <script>
+        const fileUploadForm = document.getElementById('fileUploadForm');
+        const fileInput = document.getElementById('fileInput');
+
+        fileUploadForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const selectedFile = fileInput.files[0];
+
+            if (selectedFile) {
+                const fileReader = new FileReader();
+
+                fileReader.onload = function (event) {
+                    const fileData = event.target.result;
+
+                    sendFileToServer(fileData);
+                };
+
+                fileReader.readAsText(selectedFile);
+            }
+        });
+
+        function sendFileToServer(fileData) {
+            fetch("/render", {
+                method: "POST",
+                body: JSON.stringify({
+                    data: fileData,
+                    name: CryptoJS.MD5(fileData).toString()
+                })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        var hash = CryptoJS.MD5(fileData).toString();
+                        window.location.replace(`/${hash}`)
+                    }
+                })
+                .catch(error => {
+                    console.error("Ошибка при отправке файла:", error);
+                });
+        }
+    </script>
+</body>
+
+</html>
